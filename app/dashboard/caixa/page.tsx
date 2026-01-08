@@ -12,10 +12,7 @@ interface ItemCarrinho {
 export default function CaixaPage() {
   const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([
     { id: 1, nome: 'Chopp Premium', preco: 8.50, quantidade: 2 },
-    { id: 2, nome: 'Cerveja Artesanal', preco: 12.00, quantidade: 1 },
   ]);
-
-  const [novoProduto, setNovoProduto] = useState('');
 
   const total = carrinho.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
 
@@ -25,70 +22,91 @@ export default function CaixaPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">💳 Frente de Caixa</h1>
+      <div className="bg-orange-600 text-white p-6 rounded-lg">
+        <h1 className="text-2xl font-bold">FRENTE DE CAIXA</h1>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Carrinho */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Carrinho de Compras</h2>
-
-          {carrinho.length === 0 ? (
-            <p className="text-gray-500">Carrinho vazio</p>
-          ) : (
-            <div className="space-y-4">
-              {carrinho.map((item) => (
-                <div key={item.id} className="flex items-center justify-between border-b pb-4">
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">{item.nome}</p>
-                    <p className="text-gray-500 text-sm">R$ {item.preco.toFixed(2)}</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="number"
-                      min="1"
-                      defaultValue={item.quantidade}
-                      className="w-16 px-2 py-1 border border-gray-300 rounded"
-                    />
-                    <p className="text-lg font-semibold text-gray-900 w-20">R$ {(item.preco * item.quantidade).toFixed(2)}</p>
-                    <button
-                      onClick={() => handleRemover(item.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
-              ))}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Busca de Produtos */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="font-bold mb-4">BUSCA DE PRODUTOS</h2>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm text-gray-600">Pesquisar por Nome/Descrição</label>
+              <input
+                type="text"
+                placeholder="Digite aqui..."
+                className="w-full px-3 py-2 border border-gray-300 rounded mt-1"
+              />
             </div>
-          )}
+
+            <div>
+              <label className="text-sm text-gray-600">Scanner de Código de Barras:</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded"
+                />
+                <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded font-semibold">
+                  Buscar
+                </button>
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2">
+              <input type="checkbox" />
+              <span className="text-sm">Adição rápida por código</span>
+            </label>
+
+            <div className="bg-green-600 h-24 rounded-lg"></div>
+
+            <button className="w-full bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded font-semibold">
+              📋 Listar Todos os Produtos
+            </button>
+          </div>
         </div>
 
-        {/* Resumo */}
-        <div className="bg-amber-50 rounded-lg shadow p-6 h-fit">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Resumo da Venda</h2>
-
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Subtotal:</span>
-              <span className="font-semibold">R$ {total.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Desconto:</span>
-              <span className="font-semibold">R$ 0,00</span>
-            </div>
-            <div className="border-t-2 border-gray-300 pt-4 flex justify-between">
-              <span className="text-lg font-bold text-gray-900">Total:</span>
-              <span className="text-2xl font-bold text-amber-600">R$ {total.toFixed(2)}</span>
-            </div>
+        {/* Carrinho e Caixa */}
+        <div className="lg:col-span-3 space-y-6">
+          {/* Abertura do Caixa */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="font-bold mb-4">Abertura do Caixa</h3>
+            <p className="text-sm text-gray-600">Caixa aguardando abertura</p>
+            <p className="text-lg font-bold text-green-600 mt-2">Saldo atual: R$ 0,00</p>
+            <p className="text-sm text-gray-600">Valor abertura: R$ 0,00</p>
           </div>
 
-          <div className="mt-6 space-y-3">
-            <button className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
-              ✅ Finalizar Venda
-            </button>
-            <button className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-semibold transition-colors">
-              🗑️ Limpar Carrinho
-            </button>
+          {/* Carrinho */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="font-bold mb-4">
+              CARRINHO DE COMPRAS <span className="bg-orange-500 text-white px-2 py-1 rounded text-sm ml-2">0 itens</span>
+            </h3>
+            <div className="bg-green-600 h-32 rounded-lg mb-4"></div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-600">Subtotal:</p>
+                <p className="text-2xl font-bold">R$ 0,00</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Desconto:</p>
+                <p className="text-lg">0,00</p>
+              </div>
+              <div className="border-t pt-4">
+                <p className="text-sm text-gray-600">Informar o valor actual em caixa:</p>
+                <p className="text-2xl font-bold text-right text-orange-600">R$ 0,00</p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-2">
+              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-semibold">
+                ✅ Finalizar Venda
+              </button>
+              <button className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-semibold">
+                🗑️ Fechar Caixa
+              </button>
+            </div>
           </div>
         </div>
       </div>

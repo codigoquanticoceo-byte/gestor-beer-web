@@ -1,6 +1,5 @@
 'use client';
 
-import { Sidebar } from '@/app/components/Sidebar';
 import { Header } from '@/app/components/Header';
 
 export default function DashboardLayout({
@@ -10,9 +9,8 @@ export default function DashboardLayout({
 }) {
   return (
     <div>
-      <Sidebar />
       <Header />
-      <main className="ml-64 mt-20 p-8">
+      <main className="p-6">
         {children}
       </main>
     </div>

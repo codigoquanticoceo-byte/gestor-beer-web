@@ -1,10 +1,12 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [nomeUsuario, setNomeUsuario] = useState('');
 
   useEffect(() => {
@@ -20,28 +22,60 @@ export function Header() {
     router.push('/login');
   };
 
-  return (
-    <header className="bg-white border-b border-gray-200 fixed top-0 right-0 left-64 z-50">
-      <div className="px-8 py-4 flex justify-between items-center">
-        {/* Título */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Painel de Controle</h1>
-          <p className="text-gray-500 text-sm">Bem-vindo ao GestorBeer</p>
-        </div>
+  const handleBack = () => {
+    router.back();
+  };
 
-        {/* User Info */}
+  const abas = [
+    { nome: 'Cadastros', href: '/dashboard/cadastros', icon: '📋' },
+    { nome: 'Frente Caixa', href: '/dashboard/caixa', icon: '💳' },
+    { nome: 'Financeiro', href: '/dashboard/financeiro', icon: '💰' },
+    { nome: 'Nota Fiscal', href: '/dashboard/notafiscal', icon: '📄' },
+    { nome: 'Configurações', href: '/dashboard/configuracoes', icon: '⚙️' },
+  ];
+
+  return (
+    <header className="bg-green-700 text-white">
+      {/* Barra Superior */}
+      <div className="flex items-center justify-between px-6 py-3 bg-green-700">
+        {/* Lado Esquerdo */}
         <div className="flex items-center gap-4">
-          <div className="text-right">
-            <p className="text-gray-800 font-medium">{nomeUsuario || 'Usuário'}</p>
-            <p className="text-gray-500 text-sm">Administrador</p>
-          </div>
           <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+            onClick={handleBack}
+            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded font-semibold transition"
           >
-            Logout
+            ← Voltar
           </button>
         </div>
+
+        {/* Abas no Centro */}
+        <div className="flex gap-2 flex-1 ml-6">
+          {abas.map((aba) => {
+            const isActive = pathname === aba.href;
+            return (
+              <Link
+                key={aba.href}
+                href={aba.href}
+                className={`px-4 py-2 rounded font-semibold transition flex items-center gap-2 ${
+                  isActive
+                    ? 'bg-white text-green-700'
+                    : 'bg-green-600 hover:bg-green-600 text-white'
+                }`}
+              >
+                <span>{aba.icon}</span>
+                {aba.nome}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Lado Direito */}
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-semibold transition"
+        >
+          🚪 Sair
+        </button>
       </div>
     </header>
   );
